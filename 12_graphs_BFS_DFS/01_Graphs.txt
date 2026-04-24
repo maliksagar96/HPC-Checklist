@@ -1,0 +1,5 @@
+A graph is a data structure that contains vertices connected by edges. 
+A graph can be represented as a set ordered pair of connected edges (u,v).
+
+Adjacency List - A graph is represented as an array of linked lists. The 0th element of this array contains the connections to which the node 0 is connected to and so on.
+Edge List - Ordered pair of the edges between vertices. 

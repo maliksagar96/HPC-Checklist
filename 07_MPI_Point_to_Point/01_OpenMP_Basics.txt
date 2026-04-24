@@ -1,0 +1,4 @@
+Performance = Work/Time
+
+FLOPS = floating point operations per second
+

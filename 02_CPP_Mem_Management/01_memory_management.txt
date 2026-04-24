@@ -15,3 +15,26 @@ Ans - The inbuilt vectors and strings have range checkers which doesn't let the 
 vector<int> m1 = {1,2,3};
 cout << v1.at(5) << endl; will give std::out_of_range error. The at method checks the range. 
 
+Que 4 - How does the layout of the memory allocation looks like?
+Ans - [allocator metadata/control block][usable memory][guard/check bytes/sentinel block]
+
+Que 5 - What is the function of allocator metadata?
+Ans - The allocator metadata tracks the memory size, if the previous block is free or occupied(previous block state). The allocator metadata is also necessary to free or delete the memory. 
+Sometimes it also contains bits of alignmnet.
+Following this header metadata is then usable memory where the data is stored.
+
+Que 6 - What is there in the sentinel block?
+Ans - The guard block is there for error detection. This block is there to detect overflow and memory corruption rather then memory leak.
+This block tells us that someone wrote past the assigned memory. 
+
+Que 7 - What is the sandwitch pattern and how can that be eliminated.
+Ans - new -> working code -> delete is the sandwitch pattern. This can be eliminated by using smart pointers.
+This can be found in the 02_smart_pointers.cpp.
+
+Que 8 - Write a code to declare an array of a user defined class.
+Ans - Can be found in 03_vectors_smrt_ptr.cpp.
+
+Que 9 - Why maintaining a good virtual destrcutor chain matters?
+Ans - Because if can leak memory. If a class is derived from any base class then the destructor should always have a virtual destructor in the front. 
+If a virtual keyword is missing then the object created using that class will leak memory.
+
