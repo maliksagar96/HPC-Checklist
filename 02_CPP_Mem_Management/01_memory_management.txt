@@ -1,0 +1,17 @@
+C++ memory management
+
+Que 1 - What is fragmentation in Heap?
+Ans - As the data gets deleted from the heap it creates a little segments of freed up memory and other memory locations are still occupied. This is called fragmentation. 
+If a new memory of the size that is empty on heap is required then that gets allocated. Actually the heap keeps it empty for that case only.
+If a larger chunk of memory is required on heap that is not avaialble on heap the heap mananger then manages the memory and reallocates the fragraments and the already occupied memory. This can take large time. 
+
+Que 2 - Write an instance in which memory gets managed automatically.
+MyClass m1(x); => here the resources will get mananged automatically.
+MyClass *m2 = new m2(x);
+delete m2; has to be written explicitly.
+
+Que 3 - WHat is range cheching?
+Ans - The inbuilt vectors and strings have range checkers which doesn't let the created objects take more space then what is intended.
+vector<int> m1 = {1,2,3};
+cout << v1.at(5) << endl; will give std::out_of_range error. The at method checks the range. 
+

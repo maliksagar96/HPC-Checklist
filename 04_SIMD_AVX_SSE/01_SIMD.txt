@@ -1,0 +1,18 @@
+SIMD 
+
+Que 1 - What is the difference between SIMD and multithreading?
+Ans - Scalar takes one data element and performs single instruction on this data. 
+SIMD takes multiple data and performs a single instrcution on all of them simultaneously. 
+SIMD performs same type of operation on all the elements. 
+
+SIMD => same instrcution stream. 
+SIMD => lockstep execution.
+
+multithreading on the other hand might be doing different tasks on the same memory space. 
+Mutithreading => different instrcution stream.
+Mutithreading => Runs independently. 
+
+Intermediate question - what does a process do then?
+
+A process is actually has a different memory space. The memory space of 2 processes will be different from one another. 
+

@@ -1,0 +1,86 @@
+CPU Cache Hierarchy
+
+Que 1 - WHat is the difference between Object oriented approach and data oriented approach?
+Ans - In OO approach all the details of a single object are near each other. 
+In data oriented approach all the same type of entities of all the objects are close together. Like velocity of all objects are close together. 
+
+Que 2 - What is a Cache miss?
+Ans - CPU asks the Cache memory if it has some particular data? If the data is not in the cache memory it fetches it from the main memory. This is a cahce miss. 
+If the CPU already has the data which CPU is looking for then its a Cache Hit.
+
+Que 3 - What happens after a Cache miss? Does the CPU load only a single element which was missing?
+Ans - After a cache miss a data equal to the size of cache line gets loaded to the CPU Cache.
+
+Que 4 - What is a Cache line?
+Ans - Smallest unit of data which gets transferred from main memory to CPU cache is called cache line. Instead of fetching a single byte of data CPU loads a contiguous block of data.
+
+Que 5 - What is temporal locality?
+Ans - Recently accessed data likely to be accessed again in the near future.
+
+Que 6 - What is spatial locality?
+Ans - Data that is physically close in the memory tends to be accessed around the same time.
+
+Que 7 - What is LRU algorithm?
+Ans - Least Recently used algorithm states that when a cahce miss is encountered the data which was used longest time ago be evicted and the a new data will replace the oldest data.
+
+Que 8 -  WHat is LFU?
+Ans -  Least frequently used data is replaced. Rarely used.
+
+Que 9 - WHat is FIFO? WHy is it bad?
+Ans - First in first out scheme. Doesn't take care of the frequency or recency of the data used. Worsens the performance.
+
+Que 10 - WHat is Cache coherence problem?
+Ans - When CPU access data from the main memory into the cache memory and modifies it, there are now 2 copies of data. One older data on RAM and a newer data on CPU cache. 
+Other components in the system might access this stale data and can lead to problems.
+
+Que 11 - What is write through and write back?
+Ans - When an updated data is present in the cache and a write hit occurs. The data can be written straight away in the RAM. This is called write through.
+But sometimes the data can be made to wait for a while where the it is written in the RAM at a later time to optimise performance is called write back. Like when a block eviction is needed.
+
+Que 12 - WHat is a dirty bit?
+Ans - In write back cache each data line has a bit called dirty bit. This bit is 0 and if the data is modified then it is flipped to 1.
+
+Que 13 -  WHy is cache required at all?
+Ans - Accessing data from the main memory directly into the CPU can take a large amount(upto 100) cycles. To reduce this delay cache is introduced. 
+The memory nearest to the CPU is the smallest and fastest. The memory farthest to the CPU is the biggest and slowest. 
+
+Que 14 - WHat is inclusive, exclusive and non inclusive and non exclusive policy(nine)?
+Ans - In the inclusive policy same data is present on all levels of cache L1, L2 and L3 will have same copy of the data and this data will be present on the all 3 levels. 
+exclusive policy states that if a data is present on the L1 cache it will not be present on L2 or L3. 
+Nine policy is hybrid. It doesn't strictly says that if a data is present in L1 it can or can't be on L2 and L3. 
+
+Que 15 - Write about L1 cache.
+Ans - Size of the L1 cache is very small to match the speed of the processor. 
+L1 is divided into 2 components. One is instruction cache and other is data cache. One is desiged to fetch instructions and the other is desiged to fetch data.
+Size - L1 - 16KB-128KB.
+Assocuativity - 2-8 Ways
+Latency - 1-3 cycles
+
+Que 16 - Write about L2 cache.
+Ans - The size of the L1 cache becomes a limiting factor. Hence a larger but comparatively slower to L1 cache L2 is incorporated into the CPU. L2 cache is unified cache. It can store both data and instructions. 
+Dedicated to a single processor core and it directly communicates with the L1 caches. 
+Size - L1 - 256KB-2MB.
+Assocuativity - 4-16 Ways
+Latency - 4-10 cycles
+
+
+Que 17 - Write about L3 cache.
+Ans - Most modern CPUs are multicore systems and need to share information among them to boost performance. This is the L3 cache. It is shared among all the cores present in the CPU. 
+When both L1 and L2 caches are missed L3 is checked before resorting to the main memory. 
+Size - L1 - 2MB-32MB.(even larger are also present)
+Assocuativity - 16 Ways(can vary)
+Latency - 10-40 cycles
+
+Que 18 - Why is cache memory faster then main memory?
+Ans - There are several factors. 
+Proximity of the memory
+Bus width
+Complexity of the transfer protocol
+Memory technology.
+
+The top 3 factors have a minor role in the speed. The technology has the highest impact. 
+SRAM is faster becuase it uses 6 transistors to form a single cell. This is costlier to make and 6 transistors take up a lot of area. Hence both because of the area and price the SRAM is smaller in nature. 
+DRAM cells comprises of just one transistor and a capacitor. This is eaiser to manufacture and takes a smaller area. So in a smaller area we get more number of cells meaning more memory in a smaller area. 
+The charging and discharging of the capacitor is why the DRAM is slower. 
+
+
