@@ -1,1 +1,25 @@
-One process talking to another process.
+Que 1 - What are the different sending and receiving modes in MPI send and receive?
+Ans - Send has 4 modes, Standard, buffered, synchronous and ready and all can be blocking and non blocking. 
+receive has only one mode and it can be blocking or non blocking.
+
+Que 2 - What is blocking communication?
+Ans - The idea of blocking communication is simple. The function will return only when the buffer we sent is ready to reuse. There are different ways to make sure of this and hence different communication types.
+
+Que 3 - What is local and non local mode of communication?
+Ans - The local and non local describe what conditions must be satisfied before a send call can return. 
+Local - If the send can complete without any participation from the receiver. 
+Non local - When send call depends on the reciever. 
+
+Que 4 - What is standard mode of MPI_send?
+Ans - Standard mode is the default send which MPI uses. If the send buffer is too small then it buffers the data and it follows eager protocol and stores the data in buffer and quickly returns the send call. 
+If the data is more then the eager threshold then it uses rendezvous protocol. In rendezvous protol it first ensures that matching recieve is posted.    
+
+Que 5 - What is buffered mode of MPI_Send?
+Ans - Buffered mode is when the MPI sends the data to a local buffer. The call return as soon as the data is copied into the buffer. This doesn't involve the recieving side of the communication at all. 
+
+Que 6 - What is synchronous MPI_send?
+Ans 6 - It is the strict, handshake version of the sending. When we call it the send will block until a receiver has posted a matching request. 
+
+Que 7 - What is ready send?
+Ans - This is the most aggresive and least forgiving mode of communication. The send should only be generated when we are sure that a recieve request is already in place.
+This skips all the safety checks and handshakes. This can be a bit faster then other protocols. 
