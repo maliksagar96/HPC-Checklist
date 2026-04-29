@@ -1,0 +1,19 @@
+Que 1 - What is performance roofline model?
+Ans - It is a model in HPC systems to understandt the maximum achievable performance of a program on a given hardware. 
+
+Que 2 - Define arithematic intensity?
+Ans - AI is defined as total FLOPS/Total Data movement(bytes)
+High AI => more computations, less memory traffic. Likely compute bound. 
+Low AI => less computations, more memory traffic. Likely memory bound. 
+
+Example - Matrix Multiplication => FLOPS = 2N^3
+                                    Data movement ~ O(N^2). 
+AI proportional to N. Likely compute bound. 
+
+AI tells how much useful computations we are doing per byte fetched from the memory. 
+
+Que 3 - What is ridge point?
+Ans - The intersection point of memory bandwidht and line and the compute peak line. 
+
+
+

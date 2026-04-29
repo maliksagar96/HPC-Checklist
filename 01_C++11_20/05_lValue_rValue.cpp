@@ -59,7 +59,7 @@ using namespace std;
 
 
 // Now when we use the following functions we can see the difference betweem a lvalue or rvalue. 
-// it is very important to observe if there is 
+// it is very important to observe if there is any resource which is temporary. If it is going out of scope or if it is getting destroyed for some reason then we can steal its resources.
 void printName(const string& name) {
     cout <<"[lvalue]: "<< name << endl;
 }

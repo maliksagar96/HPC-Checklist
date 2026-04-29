@@ -19,4 +19,11 @@ Que 2 - What are the keywords auto and decltype?
 Ans - Both keywords auto and decltype deduce the type at compile time. These keywords should be used when the datatype is too long std::vector<pair<int, int>> x. 
 Some examples are coded in this folder. 
 
-Que 3 - 
+Que 3 - What is lvalue and rvalue?
+Ans - An lvalue is something which has an address in the memory and it has a specific location which can be accessed repeatedly. 
+An rvalue is something which is temporary and doesn't have a lasting location in memory. 
+
+Qeu 4 - Why is move better then copying?
+Ans - When we move we don't duplicate anything. We simple transfer ownership of one exisiting memory from one object to the other. 
+
+Que 5 - 
