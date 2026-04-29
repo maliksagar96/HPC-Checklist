@@ -1,2 +1,22 @@
-Que 1 - What are some of the features added in C++17 and C++20?
-Ans - 
+Que 1 - What are the key features introduced in C++11?
+Ans - a) auto keyword
+    b) Range based for loop like
+    for(auto& x:vec) {
+
+    }
+c) Replaced NULL with nullptr.
+d) Lambda expressions were introduced.
+e) Smart pointers were introduced.
+f) move semantics + rvalue reference.
+g) constexpr
+h) static asserts
+i) override and final keywords 
+j) default and delete
+k) std::thread
+l) variadic templates were introduced.
+
+Que 2 - What are the keywords auto and decltype?
+Ans - Both keywords auto and decltype deduce the type at compile time. These keywords should be used when the datatype is too long std::vector<pair<int, int>> x. 
+Some examples are coded in this folder. 
+
+Que 3 - 
