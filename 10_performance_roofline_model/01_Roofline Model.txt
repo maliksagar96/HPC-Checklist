@@ -16,4 +16,35 @@ Que 3 - What is ridge point?
 Ans - The intersection point of memory bandwidht and line and the compute peak line. 
 
 
+Que 4 - Given a kernel with low arithmetic intensity, what optimization strategies would you apply?
+Ans - 1) Block tiling.
+2) Loop reordering. 
+3) Keeping data in shared memory longer. 
+4) Using coalesced memory.
+5) Sequential cache friendly access.
+
+Que 5 - If a kernel lies far below the roofline, what are the possible reasons?
+Ans 1) Poor occupancy - not enough threads active.
+2) Uncoalesced memory usage.
+3) Too many Cache misses.
+4) Under utilisation of hardware. 
+
+Que 6 - Compute arithematic intensity for matrix multiplication.
+Ans - C = A X B.
+Each element of C does N multiply adds. => 2N FLOPS(N multiplications and N additions.)
+This is done for NXN elements so NxNx2N = 2N^3.
+Now Data transfer
+A = N^2 reads
+B = N^2 reads
+C = N^2 writes
+
+Total = 3N^2 memory operations.
+
+AI = (2/3)N
+
+Que 7 - How would SIMD/vectorization shift a kernel’s position on the Roofline plot?
+Ans - Same data more computations => More compute throughput. The operating point wll shift upwards toward the compute roof. 
+If the system was compute bound then it would help very little. But if the system was memory bound it will increase the performance significantly. 
+
+
 

@@ -1,1 +1,33 @@
-There are 3 levels of cache.
+Que 1 - What is scalabilty in HPC?
+Ans - Ability to handle more work as the size of the computer grows. 
+
+Que 2 - What is speedup in HPC?
+Ans - speedup = t(1)/t(N)
+where t(1) = time taken by a process when 1 processor is used. 
+t(N) = time taken by a process when N processors are used.
+
+Ideally it should be linear. 
+
+Que 3 - What is strong scaling? What does ideal strong scaling looks like?
+Ans - The number of processors is increased and the size of the problem remains same. Ideal strong scaling is when the time is inversely proportional to the number of processors used. 
+Non idealities are observed due to the serial part. 
+
+Que 4 - What is Amdahl's law?
+Ans - speedup = 1/(s + p/N)
+where s is the fraction of execution time spent on serial part, p is the proportion of execution time which can be parallelized, N is the number of processors. 
+
+Que 5 - What is weak scaling? What does ideal weak scaling looks like?
+Ans - The size of the problem and the size of the computer both are increased at the same time. In ideal weak scaling the runtime remains constant as the size of the problem increase. 
+Communication overhead grows as the size of the problem increases. Synchronisation between processes also kills speed. All the processors have to wait for the slowest processor. Load imbalance is always there. One can't divide the work equally among all the processors. Like mesh partitioning could be tricky. 
+
+Que 6 -  What is Gustafson's law?
+Ans - Speedup = s + p*N
+This law states how the parallel performance increases when the size of the problem is increase. As the size of the problem increases the effect of the serial part of the code is 
+
+Que 6 - When are they used?
+Ans - Strong scaling is used where the time of the problem has to be reduced. 
+    Weak scaling is used to handle bigger problems.
+
+
+
+
