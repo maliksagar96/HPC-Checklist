@@ -1,1 +1,44 @@
 GPU memory hierarchy.
+
+Que 1 - What are registers?
+Ans - Registers are smallest, fastest per thread storage. Each threads get its own set of registers that are near to the ALUs. There is either no or very less latency. 
+
+Que 2 - What is spill over?
+Ans - When the code requires more registers then that are available per thread then the compiler will move some variables to the local memory. The local memory is present on the DRAM. NVIDIA GPUs have 255 registers per thread. 
+
+Que 3 - What is shared memory?
+Ans - Shared memory is small, fast on-chip memory that is shared by all threads in a block. 
+
+Que 4- What is on chip memory?
+Ans - The memory which is on the same silicon chip as the compute units. By compute unit we mean SM. SM has ALU, reigsters, shared memory, schedulers. DRAM is connected to compute unit by a wide high bandwidth bus. 
+
+Que 5 - What does the cudaFuncSetCacheConfig do?
+Ans - cudaFuncSetCacheConfig(kernel, config); is the syntax. We can prefer Shared memory or L1 cache. 
+cudaFuncCachePreferShared → more shared memory, less L1
+cudaFuncCachePreferL1 → more L1 cache, less shared memory
+cudaFuncCachePreferEqual → balanced
+cudaFuncCachePreferNone → default behavior
+
+These are the 4 syntax. In balanced L1 =  shared = 50%. In L1prefer command, shared = 25% and L1 = 75%. And in prefershared command shared = 75% and L1 = 25%. 
+
+Que 6 - What is pageable memory?
+Ans - Pageable memory is used in virtual memory space which can be mapped to frames on the physical memory. 
+
+Que 7 - What is pinned memory?
+Ans - Like pageable memory can be mapped to frames on physical memory, pinned memory can be mapped directly to the GPU's memory. That's why pinned memory is faster to transfer. But it takes longer to assign pinned memory on the host side. 
+syntax - cudaMalloc(&d_a, bytesize) => Pageable memory, cudaMallocHost(&d_a, byteSize) => pinned Memory.
+
+Que 8 - What is zero copy memory?
+Ans - By using zero copy memory the data can be directly modified on the host side without the actual transfer. This can be used when the data is not modified much.
+
+Que 9 - What is aligned memory access?
+Ans - The aligned memory access is the address in which the first address is the even multiple of cache Granularity. 
+
+Que 10 - What is coalesced memory access?
+Ans - When the accessed memory lies one after the other then it is a coalesced memory. So while doing the memory operations one should take care that the memory access should be aligned and coalesced to increase the performance. 
+
+
+
+
+
+

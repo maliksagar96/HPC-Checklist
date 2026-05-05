@@ -69,5 +69,16 @@ Que 19 - How do we find how many registers are used per kernel?
 Ans -nvcc -arch=sm_75 -Xptxas -v 03_sum_3_array.cu -o sum3
 using the PTX assembler. 
 
+Que 20 - When analysing programs using nsight compute what are some of the most important metrics one should observe?
+Ans - First of all to see if it is memory bound or compute bound. 
+1) Achieved Occupancy - should be 50-70%. 
+2) SM throughput. High SM utilization - Compute bound. Low SM utilization - Something is stalling. 
+3) Memory throughput - One of the most critical metrics. High bandwidth utilization - (70 - 90)% => memory bound. Low bandwidth + low compute => inefficient access pattern. 
+4) Memory access inefficiency 
+5) arithematic intensity - low => memory bound, high compute bound. 
+6) Warp stall reasons
+7) 
 
+
+Que 21 - 
 
