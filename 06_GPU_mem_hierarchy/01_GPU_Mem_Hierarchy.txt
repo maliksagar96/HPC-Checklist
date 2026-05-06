@@ -37,7 +37,9 @@ Ans - The aligned memory access is the address in which the first address is the
 Que 10 - What is coalesced memory access?
 Ans - When the accessed memory lies one after the other then it is a coalesced memory. So while doing the memory operations one should take care that the memory access should be aligned and coalesced to increase the performance. 
 
-
+Que 11 - What are Cached and uncached loads?
+Ans - In cached loads the L1 cache and L2 caches are used and data goes to the registers step by step. First in L2 then in L1 and then in the registers. 
+In the uncached loads the data is moved directly from L2 cache to the registers and L1 cache is disabled. This is done where the data is unlikely to be used again. 
 
 
 
