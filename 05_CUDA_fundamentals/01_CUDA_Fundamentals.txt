@@ -77,8 +77,8 @@ Ans - First of all to see if it is memory bound or compute bound.
 4) Memory access inefficiency 
 5) arithematic intensity - low => memory bound, high compute bound. 
 6) Warp stall reasons
-7) 
-
-
-Que 21 - 
+ 
+Que 21 - What is the problem with the 05_reduction_sum.cu program?
+Ans - 1) As stride increases then the number of threads participating per warp decreases. This is a big issue. 
+2) Another issue is shared memory bank conflicts. 
 
