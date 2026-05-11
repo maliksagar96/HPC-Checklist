@@ -1,0 +1,25 @@
+| Parameter                   | Shared Memory Tiled Kernel     | Thread Coarsened Kernel                            |
+| --------------------------- | ------------------------------ | -------------------------------------------------- |
+| Main optimization           | Shared memory tiling           | Shared memory + register tiling                    |
+| Outputs computed per thread | 1                              | 4                                                  |
+| Accumulators per thread     | `int sum`                      | `int sum[4]`                                       |
+| Shared memory A tile        | `16 x 16`                      | `64 x 16`                                          |
+| Shared memory B tile        | `16 x 16`                      | `16 x 16`                                          |
+| Shared memory/block         | 2.05 KB                        | 5.12 KB                                            |
+| Registers/thread            | 39                             | 66                                                 |
+| Grid size                   | 16,384                         | 4,096                                              |
+| Total launched threads      | 41,94,304                      | 10,48,576                                          |
+| Theoretical occupancy       | 100%                           | 75%                                                |
+| Achieved occupancy          | 99.84%                         | 74.90%                                             |
+| Active warps/scheduler      | 7.98                           | 5.98                                               |
+| Eligible warps/scheduler    | 0.69                           | 0.61                                               |
+| Executed instructions       | 102.7 Billion                  | 60.2 Billion                                       |
+| Memory throughput           | 41.44 GB/s                     | 25.80 GB/s                                         |
+| L2 cache hit rate           | 48.44%                         | 73.47%                                             |
+| Kernel duration             | 54.56 ms                       | 28.61 ms                                           |
+| Overall speed               | Baseline                       | ~1.9× faster                                       |
+| Main benefit                | Reduces global memory accesses | Reuses loaded data more aggressively               |
+| Main tradeoff               | High occupancy                 | Lower occupancy due to register pressure           |
+| Main reason for speedup     | Shared memory reuse            | Fewer blocks + fewer instructions + register reuse |
+
+Data taken from Nsight Compute outputs.  

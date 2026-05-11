@@ -1,0 +1,3 @@
+/home/sagar/Documents/HPC-Checklist/05_CUDA_fundamentals/05_convolution/03_single_kernel/build/CMakeFiles/main.dir
+/home/sagar/Documents/HPC-Checklist/05_CUDA_fundamentals/05_convolution/03_single_kernel/build/CMakeFiles/edit_cache.dir
+/home/sagar/Documents/HPC-Checklist/05_CUDA_fundamentals/05_convolution/03_single_kernel/build/CMakeFiles/rebuild_cache.dir
