@@ -71,8 +71,8 @@ using the PTX assembler.
 
 Que 20 - When analysing programs using nsight compute what are some of the most important metrics one should observe?
 Ans - First of all to see if it is memory bound or compute bound. 
-1) Achieved Occupancy - should be 50-70%. 
-2) SM throughput. High SM utilization - Compute bound. Low SM utilization - Something is stalling. 
+1) SM busy and SM throughput. This combination tells if there is any useful work being done by the SMs.
+2) Theoretical occupancy - effected by
 3) Memory throughput - One of the most critical metrics. High bandwidth utilization - (70 - 90)% => memory bound. Low bandwidth + low compute => inefficient access pattern. 
 4) Memory access inefficiency 
 5) arithematic intensity - low => memory bound, high compute bound. 
@@ -82,3 +82,10 @@ Que 21 - What is the problem with the 05_reduction_sum.cu program?
 Ans - 1) As stride increases then the number of threads participating per warp decreases. This is a big issue. 
 2) Another issue is shared memory bank conflicts. 
 
+Que 22 - How can theoretical occupancy decrease if the register pressure is more?
+Ans - Suppose we have 65536 total registers per SM. Suppose we have 256 threads per block. Now lets assume each thread uses 32 registers. Then each block uses 32 * 256 = 8192 registers. 
+Now each SM can have 65536/8192 = 8 number of blocks = 64 warps. 
+Now let assume each thread uses 128 registers. Now each block will use 32768 registers. Which is half of the total registers on an SM. No of active blocks = 2. Active warps = 16. This is how the occupancy has reduced significantly. 
+
+Que 23 - Lets do the same excercise with shared memory.
+Ans - Suppose we have 48KB of shared memory. 256 threads in total. 6KB of memory is used per block. Then we can have active blocks = 8. Now if each block uses 24 KB of shared memory then we can have active blocks = 2. 
