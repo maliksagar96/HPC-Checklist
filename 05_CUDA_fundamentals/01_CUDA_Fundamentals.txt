@@ -89,3 +89,6 @@ Now let assume each thread uses 128 registers. Now each block will use 32768 reg
 
 Que 23 - Lets do the same excercise with shared memory.
 Ans - Suppose we have 48KB of shared memory. 256 threads in total. 6KB of memory is used per block. Then we can have active blocks = 8. Now if each block uses 24 KB of shared memory then we can have active blocks = 2. 
+
+Que 24 - In a CUDA thread-coarsened matrix multiplication kernel, a single thread may load rows like `0,16,32,48` instead of contiguous rows like `0,1,2,3`. Why is this considered a better design for GPU performance, even though an individual thread accesses memory locations that are far apart?
+Ans - Even though a single thread accesses rows that are far apart, GPUs optimize global memory accesses at the warp level rather than at the individual-thread level. In the thread-coarsened design, neighboring threads in a warp still access neighboring memory locations during each load instruction, which produces coalesced memory accesses.

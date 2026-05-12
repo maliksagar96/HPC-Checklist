@@ -3,6 +3,9 @@
 	Now the key idea is to increase the size of A to 4 times as before. 
 
 	ncu --metrics gpu__time_duration.sum ./03_thread_coarsening
+
+	Que - 
+
 */
 
 #include <iostream>
