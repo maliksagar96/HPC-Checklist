@@ -27,4 +27,141 @@ Qeu 4 - Why is move better then copying?
 Ans - When we move we don't duplicate anything. We simple transfer ownership of one exisiting memory from one object to the other. 
 
 Que 5 - What is std::byte?
+Ans - It was introduced in C++17. It is introduced to handle raw memory and it is type safe. The arithematic is disabled.  
+
+Que 6 - What is type safety?
+Ans - Compiler prevents the user to define one type as another incompatible type. 
+Like 
+int x = 10;
+double y = x; // allowed. 
+This is safe because conversion is well defined. 
+
+Que 7 - How does one explicitly disable something. Like in std::byte addition is disabled or in unique_ptr copying is disabled.
+Ans - By using the keyword delete. 
+class Number {
+    int value;
+
+    public:
+    Number(int v):value(v) {}
+    
+    Number operator+(const &other) = delete;
+}
+
+or 
+class unique_ptr {
+    public:
+    unique_ptr(const &unique_ptr) = delete;
+    unique_ptr& operator=(const &other) = delete;
+}
+
+Que 8 - When was delete introduced?
+Ans - C++11. 
+
+Que 9 - What are some of the most important datastructures? What are their important features?
 Ans - 
+1) Array - Contiguous chunk of memory.
+Cache locality - Excellent 
+Access - O(1)
+Search - O(n)
+Insert at end - O(1)
+Insert/delete in the middle - O(n)
+
+2) Linked List
+Poor cache locality
+Access - O(n)
+Insertion/deletion - O(1)
+
+3) Stack
+Cache - locality - It made using array or vector then good. If made using LL then bad. 
+Implemented using array or linked List
+Push - O(1)
+Pop - O(1)
+Top - O(1)
+
+4) Queue 
+Implemented using LL or array.
+Push - O(1)
+Pop - O(1)
+
+Used in - BFS, scheduling, Buffering. 
+
+5) Deque
+Implemented using doubly linked list or cirular array. 
+Push/pop front/back - O(1)
+
+6) Hash map
+Backend - Use hash table
+Insert/search/delete - O(1)
+Worst case - O(n)
+
+7) Set
+Usually balanced BST or hash table
+Ordered set - Insert/search/delete - O(log n)
+Unordered_set - Insert/search/Delete - O(1)
+
+8) Heap/Priority Queue
+Insert - O(log n)
+Delete - O(log n)
+Top - O(1)
+
+9) BST
+Insert/Delete/Seach - O(log n)
+
+Que 10 - What is a control block of shared_ptr?
+Ans - The control block of a shared_ptr contains:
+1) Strong count
+2) Weak count
+3) Allocator information
+4) Deletor information
+
+Que 11 - What is std::intializer_list?
+Ans - Ligthweight object introduced in C++11 through which we can initialise using curly braces. 
+vector<int> vec = {1,2,3};
+This internally creates an intializer_list.
+
+class A {
+
+    public:
+
+    vector<int> values;
+
+    A(intializer_list<int> vals) {
+        for(int x:vals) {
+            values.push_back(x);
+        }
+    }
+}
+
+Que 12 - What is the difference between emplace back and push back?
+Ans - In emplace back the object is created in place in the vector memory. Push_back transfers the objects to the vector memory that are already created. 
+
+Que 13 - What is std::forward?
+Ans - It passes the lvalues as lvalues and rvalues as rvalues. Usually named parameters inside a function becomes lvalue even if they were passes as rvalues. 
+std::forward preserves this. This transfer of data without changing the type of the input parameters is called perfect forwarding.
+
+Que 14 - What is constexpr?
+Ans - When used it computes the result at the compile time. If not possible then it will compute at runtime. 
+
+Que 15 - What are some of the important changes that were done in the C++14?
+Ans - 1) constexpr was relaxed. Local variables, loops and conditional statements can now be used inside a constexpr function. 
+2) unique_ptr cleaner syntax. 
+
+Que 16 - What is noexcept?
+Ans - noexcept is a contract between programmer and compiler. When a function is written by the programmer with noexcept keyword the programmer promises the compiler that this function won't throw any exceptions. It that contract is broken that fucntion immemdiatel terminates the program. 
+
+Que 17 - Why is it used often with move constructor and why not with copy constructor?
+Ans - When we write the move constructor then we are just rewiring the pointers. Nothing is expected to go wrong there. That's why we write noexcept keyword there. 
+
+Que 18 - When was structured binding introduced?
+Ans - In C++17. 
+
+Que 19 - What is std::optional?
+Ans - A wrapper which may or maynot contian a value. Useful for wrinting functions where the return value can be nothing. Like in functions where an arbitraty value of -1 is retuned meaning there was no suitable answer.
+
+Que 20 - What are inline variables?
+Ans - They can be declared multiple times without causing linker error.
+
+Que 21 - When were fold expressions introduced?
+Ans - C++ 17. 
+
+Que 22 - 
