@@ -164,4 +164,17 @@ Ans - They can be declared multiple times without causing linker error.
 Que 21 - When were fold expressions introduced?
 Ans - C++ 17. 
 
-Que 22 - 
+Que 22 - What are concepts?
+Ans - Concepts put restrictions on templates. 
+
+template<typename T>
+require integral<T>
+
+T sum (T a, T b) {
+    return a + b;
+}
+
+Now the restriction is on the type T. T can only be int, short, char, long. It can't be float or double.
+
+Que 23 - What is std::span?
+Ans - It is an object which points to a contiguous chunk of memory. It also contains the size information. 
