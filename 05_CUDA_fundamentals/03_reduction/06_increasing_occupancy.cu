@@ -1,5 +1,5 @@
 /*
-	Increasing computing. 
+	Increasing occupancy. 
 */
 
 #include <iostream>
@@ -9,8 +9,6 @@
 #include <cuda_runtime.h>
 
 using namespace std;
-
-__device__ int d_sum;
 
 int arraySum(vector<int>& nums) {
 	cout << "Naive array Sum.\n"; 
@@ -41,67 +39,34 @@ int arrayReduction(vector<int>& nums){
 	return nums[0];
 }
 
-/*
-Would you write 
-if(tx < 32) {
-	sum += __shfl_down_sync(mask, sum, 16);
-	__syncthreads();
-	sum += __shfl_down_sync(mask, sum, 8);
-	__syncthreads();
-    sum += __shfl_down_sync(mask, sum, 4);
-	__syncthreads();
-    sum += __shfl_down_sync(mask, sum, 2);
-	__syncthreads();
-    sum += __shfl_down_sync(mask, sum, 1);
-	__syncthreads();	
-	}
-
-	or the code written in kernel.
-*/
-
-
+/* Naive GPU reduction.*/
 __global__ void gpuReduction(int *nums, int *reduced_nums, int N) {
 
-  extern __shared__ int shmem[];
+	extern __shared__ int shmem[];
+	int tx = threadIdx.x;
+	int tid = blockDim.x * blockIdx.x + tx;
 
-  int tx = threadIdx.x;
 
-  int tid1 = 2 * blockDim.x * blockIdx.x + tx;
-  int tid2 = tid1 + blockDim.x;
 
-  int sum = 0;
+	if(tid < N) {
+		shmem[tx] = nums[tid];
+	}
+	else {
+		shmem[tx] = 0;
+	}
 
-  if(tid1 < N)
-    sum += nums[tid1];
+	__syncthreads();
 
-  if(tid2 < N)
-    sum += nums[tid2];
+	for(int stride = blockDim.x/2; stride >=1 ; stride /= 2) {		
+		if(tx < stride) {
+			shmem[tx] += shmem[tx + stride];
+		}
+		__syncthreads();
+	}
 
-  shmem[tx] = sum;
-
-  __syncthreads();
-
-  for(int stride = blockDim.x / 2; stride > 32; stride /= 2) {
-
-    if(tx < stride)
-      shmem[tx] += shmem[tx + stride];
-
-    __syncthreads();
-  }
-
-  if(tx < 32) {
-    sum = shmem[tx] + shmem[tx + 32];		
-    unsigned mask = 0xffffffff;
-		//No need to write syncthreads() in between because the threads in a warp are already in sync. 
-    sum += __shfl_down_sync(mask, sum, 16);
-    sum += __shfl_down_sync(mask, sum, 8);
-    sum += __shfl_down_sync(mask, sum, 4);
-    sum += __shfl_down_sync(mask, sum, 2);
-    sum += __shfl_down_sync(mask, sum, 1);
-
-    if(tx == 0)
-      reduced_nums[blockIdx.x] = sum;
-  }
+	if(tx == 0) {
+		reduced_nums[blockIdx.x] = shmem[0];
+	}
 }
 
 int main() {
@@ -114,7 +79,7 @@ int main() {
 	int gpuResult;
 
 	int block = 256;
-	int grid = (N + 2*block - 1) / (2 * block);
+	int grid = (N + block - 1) / (2 * block);
 	int reduced_byteSize = grid * sizeof(int);
 
 	vector<int> nums(N, 0);
@@ -136,7 +101,6 @@ int main() {
 
 	gpuReduction<<<1, block, block * sizeof(int)>>>(d_nums_reduced, d_nums_reduced, grid);
 	cudaDeviceSynchronize();
-	//
 
 	cudaMemcpy(&gpuResult, d_nums_reduced, sizeof(int), cudaMemcpyDeviceToHost);
 

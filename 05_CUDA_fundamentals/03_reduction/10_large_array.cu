@@ -1,7 +1,3 @@
-/*
-	Increasing computing. 
-*/
-
 #include <iostream>
 #include <vector>
 #include <ctime>
@@ -21,51 +17,11 @@ int arraySum(vector<int>& nums) {
 	return sum;
 }
 
-/*
-  Reduction algorithm. First add elements 0 and 1, 2 and 3, 4 and 5 and so on.
-  Then add 0 and 2, 4 and 6 and so on. 
-  Then add 0 and 4, 5 and 8 and so on. 
-  And so on. 
-*/
-
-int arrayReduction(vector<int>& nums){
-
-	cout << "Reduction sum.\n";
-	int size = nums.size();
-  for(int stride = 1;stride < nums.size();stride *= 2) {
-    for(int i = 0;i<nums.size();i+=stride) {
-      nums[i] = nums[i] + nums[i+stride];
-    }
-  }
-  
-	return nums[0];
-}
-
-/*
-Would you write 
-if(tx < 32) {
-	sum += __shfl_down_sync(mask, sum, 16);
-	__syncthreads();
-	sum += __shfl_down_sync(mask, sum, 8);
-	__syncthreads();
-    sum += __shfl_down_sync(mask, sum, 4);
-	__syncthreads();
-    sum += __shfl_down_sync(mask, sum, 2);
-	__syncthreads();
-    sum += __shfl_down_sync(mask, sum, 1);
-	__syncthreads();	
-	}
-
-	or the code written in kernel.
-*/
-
 
 __global__ void gpuReduction(int *nums, int *reduced_nums, int N) {
 
   extern __shared__ int shmem[];
-
   int tx = threadIdx.x;
-
   int tid1 = 2 * blockDim.x * blockIdx.x + tx;
   int tid2 = tid1 + blockDim.x;
 
@@ -101,44 +57,50 @@ __global__ void gpuReduction(int *nums, int *reduced_nums, int N) {
 
     if(tx == 0)
       reduced_nums[blockIdx.x] = sum;
+
+			if(gridDim.x == 1) {
+				d_sum = sum;
+			}
   }
 }
 
 int main() {
 
-	int N = 1 << 12;
+	int N = 1 << 20;
 	int byteSize = N * sizeof(int);
 	int *d_nums;
-	int *d_nums_reduced = nullptr;
-	
 	int gpuResult;
 
-	int block = 256;
-	int grid = (N + 2*block - 1) / (2 * block);
-	int reduced_byteSize = grid * sizeof(int);
+	int block = 256;	
 
 	vector<int> nums(N, 0);
-
 	srand(time(0));
 	for(int i = 0; i < N; i++) {
 		nums[i] = rand() % 1000;
 	}
 
 	cudaMalloc(&d_nums, byteSize);
-	cudaMalloc(&d_nums_reduced, reduced_byteSize);
-
 	cudaMemcpy(d_nums, nums.data(), byteSize, cudaMemcpyHostToDevice);
 
 	int cpuSum = arraySum(nums);
+	int currentBlock = block;
 
-	gpuReduction<<<grid, block, block * sizeof(int)>>>(d_nums, d_nums_reduced, N);
-	cudaDeviceSynchronize();
+	int *d_nums_reduced = nullptr;
 
-	gpuReduction<<<1, block, block * sizeof(int)>>>(d_nums_reduced, d_nums_reduced, grid);
-	cudaDeviceSynchronize();
-	//
+	while(currentBlock > 1) {
+		int nextBlock = (N + 2 * block - 1)/(2*block);
+		cout << "Next Block = "<<nextBlock << endl;		
+		int reduced_byteSize = nextBlock * sizeof(int);
+		cudaMalloc(&d_nums_reduced, reduced_byteSize);
+		gpuReduction<<<nextBlock, block, block * sizeof(int)>>>(d_nums, d_nums_reduced, N);
+		cudaDeviceSynchronize();
+		d_nums = d_nums_reduced;
+		currentBlock = nextBlock;
+		N = nextBlock;
+	}
 
-	cudaMemcpy(&gpuResult, d_nums_reduced, sizeof(int), cudaMemcpyDeviceToHost);
+	// cudaMemcpy(&gpuResult, d_nums_reduced, sizeof(int), cudaMemcpyDeviceToHost);
+	cudaMemcpyFromSymbol(&gpuResult, d_sum, sizeof(int));
 
 	cout << "CPU Sum = " << cpuSum << endl;
 	cout << "GPU Sum = " << gpuResult << endl;

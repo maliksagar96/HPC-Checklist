@@ -1,7 +1,3 @@
-/*
-	Increasing computing. 
-*/
-
 #include <iostream>
 #include <vector>
 #include <ctime>
@@ -21,51 +17,11 @@ int arraySum(vector<int>& nums) {
 	return sum;
 }
 
-/*
-  Reduction algorithm. First add elements 0 and 1, 2 and 3, 4 and 5 and so on.
-  Then add 0 and 2, 4 and 6 and so on. 
-  Then add 0 and 4, 5 and 8 and so on. 
-  And so on. 
-*/
-
-int arrayReduction(vector<int>& nums){
-
-	cout << "Reduction sum.\n";
-	int size = nums.size();
-  for(int stride = 1;stride < nums.size();stride *= 2) {
-    for(int i = 0;i<nums.size();i+=stride) {
-      nums[i] = nums[i] + nums[i+stride];
-    }
-  }
-  
-	return nums[0];
-}
-
-/*
-Would you write 
-if(tx < 32) {
-	sum += __shfl_down_sync(mask, sum, 16);
-	__syncthreads();
-	sum += __shfl_down_sync(mask, sum, 8);
-	__syncthreads();
-    sum += __shfl_down_sync(mask, sum, 4);
-	__syncthreads();
-    sum += __shfl_down_sync(mask, sum, 2);
-	__syncthreads();
-    sum += __shfl_down_sync(mask, sum, 1);
-	__syncthreads();	
-	}
-
-	or the code written in kernel.
-*/
-
 
 __global__ void gpuReduction(int *nums, int *reduced_nums, int N) {
 
   extern __shared__ int shmem[];
-
   int tx = threadIdx.x;
-
   int tid1 = 2 * blockDim.x * blockIdx.x + tx;
   int tid2 = tid1 + blockDim.x;
 
@@ -101,6 +57,10 @@ __global__ void gpuReduction(int *nums, int *reduced_nums, int N) {
 
     if(tx == 0)
       reduced_nums[blockIdx.x] = sum;
+
+			if(gridDim.x == 1) {
+				d_sum = sum;
+			}
   }
 }
 
@@ -136,9 +96,9 @@ int main() {
 
 	gpuReduction<<<1, block, block * sizeof(int)>>>(d_nums_reduced, d_nums_reduced, grid);
 	cudaDeviceSynchronize();
-	//
-
-	cudaMemcpy(&gpuResult, d_nums_reduced, sizeof(int), cudaMemcpyDeviceToHost);
+	
+	// cudaMemcpy(&gpuResult, d_nums_reduced, sizeof(int), cudaMemcpyDeviceToHost);
+	cudaMemcpyFromSymbol(&gpuResult, d_sum, sizeof(int));
 
 	cout << "CPU Sum = " << cpuSum << endl;
 	cout << "GPU Sum = " << gpuResult << endl;

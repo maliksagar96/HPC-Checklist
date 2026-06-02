@@ -1,106 +1,66 @@
-/*
-	Increasing computing. 
-*/
-
 #include <iostream>
 #include <vector>
 #include <ctime>
 #include <cassert>
 #include <cuda_runtime.h>
+#include <ranges>
+#include <algorithm>
+#include <climits>
 
 using namespace std;
 
-__device__ int d_sum;
+__device__ int d_max;
 
-int arraySum(vector<int>& nums) {
-	cout << "Naive array Sum.\n"; 
-	int sum = 0;
-	for(int x:nums) {
-    sum += x;
-	}
-	return sum;
+int arrayMax(vector<int> nums) {
+	cout << "Max of Array.\n"; 
+	ranges::sort(nums);
+	return nums.back();
 }
-
-/*
-  Reduction algorithm. First add elements 0 and 1, 2 and 3, 4 and 5 and so on.
-  Then add 0 and 2, 4 and 6 and so on. 
-  Then add 0 and 4, 5 and 8 and so on. 
-  And so on. 
-*/
-
-int arrayReduction(vector<int>& nums){
-
-	cout << "Reduction sum.\n";
-	int size = nums.size();
-  for(int stride = 1;stride < nums.size();stride *= 2) {
-    for(int i = 0;i<nums.size();i+=stride) {
-      nums[i] = nums[i] + nums[i+stride];
-    }
-  }
-  
-	return nums[0];
-}
-
-/*
-Would you write 
-if(tx < 32) {
-	sum += __shfl_down_sync(mask, sum, 16);
-	__syncthreads();
-	sum += __shfl_down_sync(mask, sum, 8);
-	__syncthreads();
-    sum += __shfl_down_sync(mask, sum, 4);
-	__syncthreads();
-    sum += __shfl_down_sync(mask, sum, 2);
-	__syncthreads();
-    sum += __shfl_down_sync(mask, sum, 1);
-	__syncthreads();	
-	}
-
-	or the code written in kernel.
-*/
 
 
 __global__ void gpuReduction(int *nums, int *reduced_nums, int N) {
 
   extern __shared__ int shmem[];
-
   int tx = threadIdx.x;
-
   int tid1 = 2 * blockDim.x * blockIdx.x + tx;
   int tid2 = tid1 + blockDim.x;
 
-  int sum = 0;
+  int blockMax = INT_MIN;
 
   if(tid1 < N)
-    sum += nums[tid1];
+    blockMax = max(blockMax, nums[tid1]);
 
   if(tid2 < N)
-    sum += nums[tid2];
+    blockMax = max(blockMax,nums[tid2]);
 
-  shmem[tx] = sum;
+  shmem[tx] = blockMax;
 
   __syncthreads();
 
   for(int stride = blockDim.x / 2; stride > 32; stride /= 2) {
 
     if(tx < stride)
-      shmem[tx] += shmem[tx + stride];
+      shmem[tx] = max(shmem[tx], shmem[tx + stride]);
 
     __syncthreads();
   }
 
   if(tx < 32) {
-    sum = shmem[tx] + shmem[tx + 32];		
+    blockMax = max(shmem[tx], shmem[tx + 32]);		
     unsigned mask = 0xffffffff;
 		//No need to write syncthreads() in between because the threads in a warp are already in sync. 
-    sum += __shfl_down_sync(mask, sum, 16);
-    sum += __shfl_down_sync(mask, sum, 8);
-    sum += __shfl_down_sync(mask, sum, 4);
-    sum += __shfl_down_sync(mask, sum, 2);
-    sum += __shfl_down_sync(mask, sum, 1);
+    blockMax = max(blockMax, __shfl_down_sync(mask, blockMax, 16));
+    blockMax = max(blockMax, __shfl_down_sync(mask, blockMax, 8));
+    blockMax = max(blockMax, __shfl_down_sync(mask, blockMax, 4));
+    blockMax = max(blockMax, __shfl_down_sync(mask, blockMax, 2));
+    blockMax = max(blockMax, __shfl_down_sync(mask, blockMax, 1));
 
     if(tx == 0)
-      reduced_nums[blockIdx.x] = sum;
+      reduced_nums[blockIdx.x] = blockMax;
+
+			if(gridDim.x == 1) {
+				d_max = blockMax;
+			}
   }
 }
 
@@ -129,16 +89,16 @@ int main() {
 
 	cudaMemcpy(d_nums, nums.data(), byteSize, cudaMemcpyHostToDevice);
 
-	int cpuSum = arraySum(nums);
+	int cpuSum = arrayMax(nums);
 
 	gpuReduction<<<grid, block, block * sizeof(int)>>>(d_nums, d_nums_reduced, N);
 	cudaDeviceSynchronize();
 
 	gpuReduction<<<1, block, block * sizeof(int)>>>(d_nums_reduced, d_nums_reduced, grid);
 	cudaDeviceSynchronize();
-	//
-
-	cudaMemcpy(&gpuResult, d_nums_reduced, sizeof(int), cudaMemcpyDeviceToHost);
+	
+	// cudaMemcpy(&gpuResult, d_nums_reduced, sizeof(int), cudaMemcpyDeviceToHost);
+	cudaMemcpyFromSymbol(&gpuResult, d_max, sizeof(int));
 
 	cout << "CPU Sum = " << cpuSum << endl;
 	cout << "GPU Sum = " << gpuResult << endl;
