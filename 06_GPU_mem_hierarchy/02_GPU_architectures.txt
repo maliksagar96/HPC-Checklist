@@ -1,0 +1,85 @@
+GPU architectures
+
+Que 1 - What are the GPU architectures in order?
+Ans - 
+Tesla (2006)
+Fermi (2010)
+Kepler (2012)
+Maxwell (2014)
+Pascal (2016)
+Volta (2017)
+Turing (2018)
+Ampere (2020)
+Ada Lovelace (2022)
+Hopper (2022)
+Blackwell (2024)
+
+Que 2 - What are the changes from Tesla to Fermi?
+Ans - Almost everything. 
+1) Configurable L1 and unified L2 cache. 
+2) Larger shared memory. 16 KB to 48 KB.
+3) Faster Double precision. 
+4) Fermi - Multiple kernel execution. 
+
+Que 3 - Changes from Fermi to Kepler?
+Ans - 1) Increase in compute capability. Much more cuda cores per SM. Fermi - 32 and Kepler - 192. 
+2) Kepler introduced hyper Q. Multiple CPU threads can launch work on a single GPU simultaneouly increasing GPU utilisation. 
+3) Dynamic parallelism. CPU launches kernel. Kernel launches another kernel. 
+4) Kepler introduced warp shuffle instructions.
+5) Better energy efficiency then Fermi.
+
+Que 4 - What is basically a cuda core?
+Ans - A cuda core is basically an ALU. 
+
+Que 5 - What are the major changes from Kepler to Maxwell?
+Ans - 1) Reduced the number of cuda cores from 192 to 128 but made scheduling and resource utilisation better. 
+2) Larger L2 cache. 
+3) Kepler has a configurable shared memory cache. 
+4) Better energy efficiency then Kepler.
+5) Shared memory atomics and atomic operations became faster. 
+
+Que 6 - What are the changes from Maxwell to Pascal?
+Ans - 1) Pascal introduced NVlink. 
+2) HBM2. Much faster and energy efficient. 
+3) Better atomic performance. 
+4) Maxwell had basic unified memroy support. Pascal had a dedicated page migration engine.
+
+Que 7 - What are the changes from Pascal to Volta?
+Ans - 1) Volta introduced tensor cores for the first time. 
+2) Better handling of brach divergence. 
+3) Volta - Larger shared memory. 
+4) Volta improved faster register access. 
+5) Increaed NVlink bandwidth as well as HBM bandwidth. 
+
+Que 8 - What are the major changes in Volta to Turing?
+Ans - 1) RT cores were introduced. 
+2) This is 7.5. 
+3) RT cores accelerate BVH traversal and Ray tracing interaction. 
+4) INT4 and INT8 tensor core support. Volta had FP16 focused tensor core support. 
+5) Improved warp scheduling. 
+
+Que 9 - Changes from Turing to Ampere?
+Ans - 1) Much better FP32 throughput. Turing 64 FP32 cuda cores per SM. Ampere - 128 FP32 cuda cores per SM.
+2) Tensor core now support FP16, BF16, TF32, INT8 and INT4. 
+3) MIG - Multiple instance GPU. Unique to A100. A single GPU can be partitioned into multilple smaller GPUs. 
+4) Increased NVLink bandwidth again. 
+5) 3rd gen tensor cores. 
+
+Que 10 - What are the changes from Ampere to Ada Lovelace?
+Ans - 1) More FP32 throughput. RTX 3090(Ampere) - 82 SMs - 128 cuda cores per SM. RTX 4090(Ada) - 128 SMs - 128 cuda cores per SM.  
+2) Larger L2 cache. 6 MB and 72 MB respectively. 
+3) 4th gen Tensor cores. Better FP8 support. 
+4) 3rd gen RT cores. Faster rendering. 
+5) Shader execution reordering - efficiency use of diverging workloads. 
+ 
+Que 11 - Ada to Hopper?
+Ans - 1) Blocks can now be grouped into clusters. One of the biggest programming changes. 
+2) Distributed shared memory. Multiple blocks in a cluster can now access shared memory. 
+3) Transformer engine. 
+4)  
+
+
+
+
+
+
