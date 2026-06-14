@@ -76,7 +76,14 @@ Que 11 - Ada to Hopper?
 Ans - 1) Blocks can now be grouped into clusters. One of the biggest programming changes. 
 2) Distributed shared memory. Multiple blocks in a cluster can now access shared memory. 
 3) Transformer engine. 
-4)  
+ 
+
+
+
+
+
+
+
 
 
 
