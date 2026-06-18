@@ -1,1 +1,14 @@
 Cluster architecture basics.
+
+Que 1 - How are CPU-CPU connections made?
+Ans - CPU-CPU connections are intel(UPI - Ultrapath interconnect)
+AMD - Infinity fabric
+
+Que 2 - GPU - GPU connection?
+Ans - Nvlink in nvidia and infinity fabric in AMD.
+
+Que 3 - How does the ALLreduce call of the nccl work?
+Ans - The data goes around in circular fashion. GPU0->GPU1->GPU2....
+Suppose GPU0 has gradient value of 2 GPU1 has gradient value 4 and so on. GPU0 will send to GPU1 and they will add up. GPU1 now has 6. This will keep on happening untill the last GPU is reached. Then this data is broadcasted to all the other GPU.
+
+Que 4 - 
