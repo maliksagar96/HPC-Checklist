@@ -1,1 +1,57 @@
 Cluster architecture basics.
+
+Que 1 - How are CPU-CPU connections made?
+Ans - CPU-CPU connections are intel(UPI - Ultrapath interconnect)
+AMD - Infinity fabric
+
+Que 2 - GPU - GPU connection?
+Ans - Nvlink in nvidia and infinity fabric in AMD.
+
+Que 3 - How does the ALLreduce call of the nccl work?
+Ans - The data goes around in circular fashion. GPU0->GPU1->GPU2....
+Suppose GPU0 has gradient value of 2 GPU1 has gradient value 4 and so on. GPU0 will send to GPU1 and they will add up. GPU1 now has 6. This will keep on happening untill the last GPU is reached. Then this data is broadcasted to all the other GPU.
+
+Que 4 - What are the tree algorithm and ring algorithm?
+Ans - GPU0->GPU1->GPU2->GPU3->GPU0 is a ring. 
+
+A tree would look something like this.
+          0
+       /     \
+      1       2
+     / \     / \
+    3   4   5   6
+               \
+                7
+
+In broadcast the info travels down the tree. It takes only 3 hops to get data from 0 to 7. In ring algorithm however the data will take 7 hops. 
+For small messages the tree algo wins because of low latency. For large messages ring wins because of bandwidht domination. 
+
+Que 5 - What is meant by CPU Affinity?
+Ans - In the nvidia-smi topo -m command we see that each GPU is given some CPU affinity like 0-31, 32-65 etc. That means the GPU is very close to that CPU. 
+
+Que 6 - What is NUMA affinity?
+Ans - It is the socket number to which the GPU is closesst to. 
+
+Que 7 - What is meant by SYS connection in nvidia-smi topo -m?
+Ans - The sys connection mean the connection looks like this
+NUMA Node 0                    NUMA Node 1
+-----------                    -----------
+GPU0                            GPU2
+GPU1                            GPU3
+   \                            /
+    \                          /
+      CPU Socket 0 <--> CPU Socket 1
+          (SMP Interconnect)
+
+The information between GPU0 and GPU2 will be GPU0 -> PCIe -> SMP interconnect -> PCIe -> GPU2. 
+
+Que 8 - What is PCIe hostbridge?
+Ans -       CPU + Memory
+            |
+    PCIe Host Bridge
+      /     |     \
+   GPU0   NIC    SSD
+
+   The host bridge send the information where it need to go from CPU. (or recieve from)
+
+

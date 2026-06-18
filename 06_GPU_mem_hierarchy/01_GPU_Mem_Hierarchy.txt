@@ -57,4 +57,5 @@ Texture (TEX) units
 The warp scheduler selects ready warps, the dispatch unit sends instructions to execution units, the register file stores thread registers, and the shared memory/L1 cache provides low-latency on-chip memory access. SFUs handle operations like sin, cos, sqrt, etc., while TEX units are used for texture and read-only memory operations.
 
 
-
+Que 13 - What will happen if we launch kernel1 and kernel2 using the CUDA streams and without using the CUDA streams?
+Ans - Without using the CUDA streams kernel2 will launch only after kernel1 finishes execution. There won't be any resource sharing between kernel1 and kernel2. But if we use the cudastream then kernel 1 and 2 are launched at the same time and they share resources. 
